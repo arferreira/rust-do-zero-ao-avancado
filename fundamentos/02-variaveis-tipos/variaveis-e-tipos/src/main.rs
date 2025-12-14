@@ -4,32 +4,33 @@
 *
 * */
 
+mod dados_primitivos;
 
 fn main() {
-
     let mut x: i32 = 10; // signed 
     let y: u32 = 8; // unsigned
 
     let z: f64 = 3.14333;
 
     let name: String = String::from("antonio");
-    let _name2: &str  = "antonio";
+    let _name2: &str = "antonio";
 
     println!("x é: {x}, y é: {y} e z é: {z}");
 
     // mutabilidade
     x = 11;
     println!("x é: {x}");
-    
+
     println!("nome é: {name}");
 
-    { // escopo que muda o nome para joao
-      let name = "joão";
-      let base_calculo = 2;
-      println!("nome é: {name}");
-      x = 1000 * base_calculo;
+    {
+        // escopo que muda o nome para joao
+        let name = "joão";
+        let base_calculo = 2;
+        println!("nome é: {name}");
+        x = 1000 * base_calculo;
     }
-    
+
     // ira quebrar pois foi definido apenas no escopo acima
     // println!("base calculo é: {}", base_calculo);
 
@@ -37,7 +38,6 @@ fn main() {
     // escopo da funcao main
     println!("nome é: {name}");
 
-    
     // shadowing
     let _idade = 37;
     // idade = 16; nao conseguirei mudar o valor em razao da mutabilidade
@@ -49,8 +49,7 @@ fn main() {
     const TENTATIVAS: i8 = 10;
     println!("TENTATIVAS é: {TENTATIVAS}");
 
-    //char 
+    //char
     let primeira_letra: char = 'a';
     println!("primeira letra é: {primeira_letra}");
-
 }
