@@ -19,19 +19,18 @@ pub fn data_types() {
     // tipo de alocação para inteiros baseado na arquitetura
     let arch1: usize = 5;
     let arch2: isize = 8;
-    
+
     // Chars
     let caractere: char = 'a';
 
     // Boolean
     let b: bool = false; // true
 
-    // Alias 
+    // Alias
     type Idade = u8;
     let idade_antonio: Idade = 18;
 
     // Conversao de tipos de dados
     let a: i32 = 10;
     let b = a as f64;
-
 }

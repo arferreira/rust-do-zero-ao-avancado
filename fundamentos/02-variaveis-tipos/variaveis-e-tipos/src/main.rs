@@ -2,11 +2,19 @@
 *
 * Variaveis
 *
+* Exercícios
+* - Exe1 : https://play.rust-lang.org/?version=stable&mode=debug&edition=2024&gist=d0dde26ba6aba374f932059ed58f9259
+* - Exe2: https://play.rust-lang.org/?version=stable&mode=debug&edition=2024&gist=941789d869d16dee173a6ebf4c49f12a
+* - Exe3: https://play.rust-lang.org/?version=stable&mode=debug&edition=2024&gist=0abcbb7f268026f5fa057ed2b730e899
 * */
 
+mod dados_compostos;
 mod dados_primitivos;
 
 fn main() {
+    dados_compostos::compound_data_types();
+    dados_primitivos::data_types();
+
     let mut x: i32 = 10; // signed 
     let y: u32 = 8; // unsigned
 
