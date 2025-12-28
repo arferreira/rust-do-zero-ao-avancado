@@ -1,1 +1,0 @@
-/Users/antoniosouza/Developer/rust-do-zero-ao-avancado/fundamentos/01-hello-world/automatico/target/debug/automatico: /Users/antoniosouza/Developer/rust-do-zero-ao-avancado/fundamentos/01-hello-world/automatico/src/main.rs
