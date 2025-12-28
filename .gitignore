@@ -1,0 +1,24 @@
+# Rust
+target/
+**/*.rs.bk
+*.pdb
+Cargo.lock
+
+# Binários compilados manualmente
+**/main
+**/*.exe
+
+# Arquivos temporários do sistema
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Arquivos de log
+*.log
+
