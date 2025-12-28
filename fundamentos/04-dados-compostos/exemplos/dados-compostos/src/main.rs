@@ -12,7 +12,7 @@
 * - EX3: https://play.rust-lang.org/?version=stable&mode=debug&edition=2024&gist=b8b4c79ad0a352f294fb96c5662545e2
 */
 
-pub fn compound_data_types() {
+fn main() {
     // Strings (&str e String)
     let string_de_tamanho_fixo: &str = "antonio";
     let mut string_de_tamanho_flexivel: String = String::from("joão");

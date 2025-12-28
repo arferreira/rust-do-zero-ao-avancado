@@ -3,7 +3,7 @@
 // - For
 // - While
 
-pub fn repeticao() {
+fn main() {
     // Loops
     let s = 1;
 

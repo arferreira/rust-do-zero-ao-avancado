@@ -7,7 +7,7 @@ enum Direcao {
     Oeste,
 }
 
-pub fn condicionais() {
+fn main() {
     let direcao = Direcao::Norte;
 
     match direcao {

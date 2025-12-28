@@ -8,19 +8,7 @@
 * - Exe3: https://play.rust-lang.org/?version=stable&mode=debug&edition=2024&gist=0abcbb7f268026f5fa057ed2b730e899
 * */
 
-mod condicionais;
-mod dados_compostos;
-mod dados_primitivos;
-mod funcoes;
-mod loops;
-
 fn main() {
-    dados_compostos::compound_data_types();
-    dados_primitivos::data_types();
-    funcoes::principal();
-    condicionais::condicionais();
-    loops::repeticao();
-
     let mut x: i32 = 10; // signed 
     let y: u32 = 8; // unsigned
 

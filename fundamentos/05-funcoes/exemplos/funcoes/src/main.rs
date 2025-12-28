@@ -16,7 +16,7 @@ fn bom_dia(name: &str, _sobrenome: &str) {
     println!("Olá {name}, bom dia!");
 }
 
-pub fn principal() {
+fn main() {
     let name: &str = "Antonio";
     bom_dia(name, "Souza");
 

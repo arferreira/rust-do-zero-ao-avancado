@@ -6,7 +6,7 @@
 *  - Boolean
 */
 
-pub fn data_types() {
+fn main() {
     // Unsigned Integers
     let unsigned_num: u8 = 5; // u8, u16, u32, u64, u128
 
