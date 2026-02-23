@@ -4,6 +4,11 @@ struct Compra {
     metodo_pagamento: MetodoPagamento,
 }
 
+struct Produto {
+    nome: String,
+    preco: f64,
+}
+
 enum MetodoPagamento {
     Pix(String),
     Cartao(String, u32),
@@ -16,6 +21,7 @@ enum PagamentoErro {
     ParcelasExcedidas(u32),
     CartaoRecusado(String),
     SaldoInsuficiente { tentou: f64, disponivel: f64 },
+    CarrinhoVazio,
 }
 
 fn buscar_usuario(email: String) -> Result<String, String> {
@@ -84,43 +90,110 @@ fn valida_valor(valor: f64) -> Result<f64, String> {
     }
 }
 
-fn finalizar_compra(email: String, metodo: MetodoPagamento, valor: f64) -> Result<(), String> {
-    let nome = buscar_usuario(email)?;
-    let valor = valida_valor(valor)?;
+fn finalizar_compra(
+    email: String,
+    carrinho: &[Produto],
+    metodo: MetodoPagamento,
+) -> Result<(), PagamentoErro> {
+    if carrinho.is_empty() {
+        return Err(PagamentoErro::CarrinhoVazio);
+    }
 
-    println!("Processando compra de {} no valor de R${:.2}", nome, valor);
+    let valor = calcular_total(carrinho);
+
+    if valor <= 0.00 {
+        return Err(PagamentoErro::ValorInvalido(valor));
+    }
+
+    match metodo {
+        MetodoPagamento::Pix(chave) => {
+            println!(
+                "Gerando QR code para a chave {} no valor de: R$ {:.2}",
+                chave, valor
+            );
+        }
+        MetodoPagamento::Cartao(numero, parcelas) => {
+            if parcelas > 10 {
+                return Err(PagamentoErro::ParcelasExcedidas(parcelas));
+            }
+            println!(
+                "Cobrando R$ {:.2} no cartao {} em {}x",
+                valor, numero, parcelas
+            );
+        }
+        MetodoPagamento::Boleto(codigo) => {
+            println!("Gerando boleto no valor de R$ {:.2}", valor);
+            println!("Codigo do boleto: {}", codigo);
+        }
+        MetodoPagamento::Debito(numero) => {
+            println!(
+                "Passando R$ {:.2} no debito no carto com numero: {}",
+                valor, numero
+            );
+        }
+    }
+
     Ok(())
 }
 
+fn calcular_total(carrinho: &[Produto]) -> f64 {
+    carrinho.iter().map(|p| p.preco).sum()
+}
+
+fn exibir_carrinho(carrinho: &[Produto]) {
+    println!("=== Seu Carrinho ===");
+    for (i, produto) in carrinho.iter().enumerate() {
+        println!("{}. {} - R${:.2}", i + 1, produto.nome, produto.preco);
+    }
+
+    let total = calcular_total(carrinho);
+    println!("Total: R${:.2}", total);
+    println!("====================");
+}
+
 fn main() {
-    let email = String::from("antonio@gmail.com");
+    let mut carrinho: Vec<Produto> = Vec::new();
 
-    if let Ok(nome) = buscar_usuario(email) {
-        println!("Ola, {}! Processando seu pagamento....", nome);
+    carrinho.push(Produto {
+        nome: String::from("Macbook"),
+        preco: 999.99,
+    });
 
-        let pagamento = MetodoPagamento::Cartao(String::from("4242424242424242"), 10);
-        match processar_pagamento(pagamento, 100.0) {
-            Ok(()) => println!("Pagamento realizado com sucesso!"),
-            Err(erro) => match erro {
-                PagamentoErro::ValorInvalido(v) => {
-                    println!("Valor: R$ {} nao e valido", v)
-                }
-                PagamentoErro::ParcelasExcedidas(p) => {
-                    println!("{}x nao e permitido", p)
-                }
-                PagamentoErro::CartaoRecusado(motivo) => {
-                    println!("Cartao recusado: {}", motivo);
-                    println!("Tente outro metodo de pagamento");
-                }
-                PagamentoErro::SaldoInsuficiente { tentou, disponivel } => {
-                    println!(
-                        "Saldo insuficiente. Tentou R${:.2}, porem disponivel R${:.2}",
-                        tentou, disponivel
-                    )
-                }
-            },
-        }
-    } else {
-        println!("Usuario nao encontrado. Crie sua conta primeiro.")
+    carrinho.push(Produto {
+        nome: String::from("Laptop Dell"),
+        preco: 799.99,
+    });
+
+    carrinho.push(Produto {
+        nome: String::from("Mouse Logitech"),
+        preco: 29.99,
+    });
+
+    exibir_carrinho(&carrinho);
+
+    let metodo = MetodoPagamento::Pix(String::from("richas@gmail.com"));
+
+    match finalizar_compra(String::from("richas@gmail.com"), &carrinho, metodo) {
+        Ok(()) => println!("Compra finalizada com sucesso!"),
+        Err(erro) => match erro {
+            PagamentoErro::CarrinhoVazio => {
+                println!("Seu carrinho esta vazio!")
+            }
+            PagamentoErro::ValorInvalido(v) => {
+                println!("Valor invalido: R${:.2}", v);
+            }
+            PagamentoErro::ParcelasExcedidas(p) => {
+                println!("Parcelas excedidas: {}", p);
+            }
+            PagamentoErro::CartaoRecusado(motivo) => {
+                println!("Seu cartao foi recusado: {}", motivo);
+            }
+            PagamentoErro::SaldoInsuficiente { tentou, disponivel } => {
+                println!(
+                    "Saldo insuficiente: tentou: {} - disponivel: {}",
+                    tentou, disponivel
+                )
+            }
+        },
     }
 }
