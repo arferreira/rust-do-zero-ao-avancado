@@ -1,0 +1,5 @@
+[workspace]
+members = [
+  "loja_core",
+  "loja_cli",
+]
