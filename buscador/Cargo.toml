@@ -1,0 +1,10 @@
+[package]
+name = "buscador"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rapina = "0.8.0"
+reqwest = { version = "0.13.2", features = ["json"] }
+serde = { version = "1.0.228", features = ["derive"] }
+tokio = { version = "1.50.0", features = ["full"] }
