@@ -30,28 +30,6 @@ struct AlertaPayload {
     severidade: u8,
 }
 
-struct Pipeline<T: Processavel> {
-    eventos: Vec<Evento<T>>,
-}
-
-impl<T: Processavel> Pipeline<T> {
-    fn new() -> Self {
-        Self {
-            eventos: Vec::new(),
-        }
-    }
-
-    fn adicionar(&mut self, evento: Evento<T>) {
-        self.eventos.push(evento);
-    }
-
-    fn processar_todos(&self) {
-        for evento in &self.eventos {
-            evento.processar_evento();
-        }
-    }
-}
-
 impl Processavel for LogPayload {
     fn processar(&self) {
         println!("[LOG][{}] {}", self.nivel, self.mensagem);
@@ -98,39 +76,10 @@ fn processar_qualquer_coisa<T: Processavel>(payload: &T) {
     payload.processar();
 }
 
-fn criar_evento_padrao() -> Evento<impl Processavel> {
-    Evento::new(
-        0,
-        LogPayload {
-            mensagem: String::from("Evento padrao"),
-            nivel: String::from("INFO"),
-        },
-    )
-}
-
-fn processar_e_exibir<T>(payload: &T)
-where
-    T: Processavel + Display + Clone + PartialEq,
-{
-    println!("processar_e_exibiro: {}", payload);
-    payload.processar();
-    payload.resumo();
-}
-
-fn principal() {
-    let mut pipeline: Pipeline<LogPayload> = Pipeline::new();
-    let evento = Evento::new(
-        178923828349,
-        LogPayload {
-            mensagem: String::from("Rapina foi iniciado"),
-            nivel: String::from("INFO"),
-        },
-    );
-    pipeline.adicionar(evento);
-    pipeline.processar_todos();
-
-    let evento2 = criar_evento_padrao();
-}
+// fn principal() {
+//     let nome = String::from("Qualquer nome");
+//     processar_qualquer_coisa(&nome);
+// }
 
 pub struct Evento<T> {
     timestamp: u64,
