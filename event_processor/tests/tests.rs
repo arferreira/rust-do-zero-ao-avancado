@@ -1,4 +1,7 @@
-use event_processor::{Evento, LogPayload};
+use event_processor::{
+    AlertaPayload, Evento, LogPayload, MetricaPayload, Processavel, evento, pipeline,
+    pipeline_dinamico::PipelineDinamico,
+};
 #[test]
 fn evento_string_criado_corretamente() {
     let evento = Evento::new(100, String::from("teste"));
@@ -42,4 +45,39 @@ fn evento_com_payload_processavel() {
         },
     );
     evento.processar_evento();
+}
+
+#[test]
+fn pipeline_dinamico_aceita_tipos_misturados() {
+    let mut pipeline = PipelineDinamico::new();
+    let eventos: Vec<Box<dyn Processavel>> = vec![
+        Box::new(LogPayload {
+            mensagem: String::from("Rapina foi iniciado"),
+            nivel: String::from("INFO"),
+        }),
+        Box::new(MetricaPayload {
+            nome: String::from("cpu"),
+            valor: 73.3,
+        }),
+        Box::new(AlertaPayload {
+            mensagem: String::from("Disco cheio"),
+            severidade: 5,
+        }),
+    ];
+
+    for evento in eventos {
+        pipeline.adicionar(evento);
+    }
+    assert_eq!(pipeline.total(), 3);
+}
+
+#[test]
+fn debug_funciona() {
+    let log = LogPayload {
+        mensagem: String::from("test"),
+        nivel: String::from("INFO"),
+    };
+    let debug = format!("{:?}", log);
+    assert!(debug.contains("test"));
+    assert!(debug.contains("INFO"));
 }

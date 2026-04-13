@@ -3,10 +3,22 @@ use crate::{
     traits::{Formatavel, Processavel},
 };
 
+// Traits mais comuns
+// #[derive(Debug)]
+// #[derive(Default)]
+// #[derive(Clone)]
+// #[derive(PartialEq)]
+// #[derive(Eq)]
+// #[derive(Hash)]
+
+// Quando vc deve utilizar a derive ou implementar na mao?
+
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct AlertaPayload {
     pub mensagem: String,
     pub severidade: u8,
 }
+
 impl Processavel for AlertaPayload {
     fn processar(&self) {
         let icone = if self.severidade >= 5 { "🔴" } else { "🟡" };

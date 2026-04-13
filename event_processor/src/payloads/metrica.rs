@@ -1,5 +1,8 @@
+use core::fmt;
+
 use crate::traits::{Formatavel, Processavel};
 
+#[derive(Debug, Clone, PartialEq, Default)]
 pub struct MetricaPayload {
     pub nome: String,
     pub valor: f64,
@@ -22,5 +25,13 @@ impl Formatavel for MetricaPayload {
 
     fn para_texto(&self) -> String {
         format!("{} = {}", self.nome, self.valor)
+    }
+}
+
+pub struct Metricas(pub Vec<String>);
+
+impl fmt::Display for Metricas {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        todo!();
     }
 }
